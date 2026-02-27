@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIT-HUB | Campus Marketplace & Services</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#10b981">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SLIT-HUB">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=SH&background=10b981&color=fff&size=192">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.2);
+            --bg: #f8fafc; 
+            --card: #ffffff; 
+            --text: #1e293b; 
+            --text-light: #334155;
+            --text-muted: #64748b;
+            --border: #e2e8f0; 
+            --input-bg: #f1f5f9;
+            --nav-text: #64748b;
+            
+            /* Level colors */
+            --level-100: #3b82f6;
+            --level-200: #10b981;
+            --level-300: #f59e0b;
+            --level-400: #ef4444;
+            --level-500: #8b5cf6;
+        }
+        
+        html.dark { 
+            --bg: #0f172a; 
+            --card: #1e293b; 
+            --text: #f8fafc; 
+            --text-light: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155; 
+            --input-bg: #1e293b;
+            --nav-text: #94a3b8;
+        }
+
+        body { 
+            padding-bottom: 90px;
+            background-color: var(--bg); 
+            color: var(--text); 
+            transition: background 0.4s ease, color 0.4s ease; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Text color classes */
+        .text-default { color: var(--text) !important; }
+        .text-light { color: var(--text-light) !important; }
+        .text-muted { color: var(--text-muted) !important; }
+        .bg-card { background-color: var(--card) !important; }
+        .border-base { border-color: var(--border) !important; }
+        .bg-input { background-color: var(--input-bg) !important; }
+
+        /* Input styles */
+        input, textarea, select {
+            background-color: var(--input-bg) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted) !important;
+            opacity: 0.7;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.1));
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .brand-logo:active { transform: scale(0.95); }
+
+        .screen { animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1);
+        }
+
+        .sold-overlay { 
+            background: rgba(0,0,0,0.7); 
+            position: absolute; inset: 0; 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; font-weight: 900; font-size: 1.1rem; 
+            backdrop-filter: blur(3px); z-index: 20; 
+        }
+
+        .view-toggle { 
+            background: var(--border); 
+            border-radius: 20px; 
+            padding: 5px; 
+            display: flex; 
+            gap: 5px; 
+            width: fit-content; 
+            margin: 0 auto 25px; 
+        }
+        .view-toggle button { 
+            padding: 10px 24px; 
+            border-radius: 16px; 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            color: var(--text-muted); 
+        }
+        .view-toggle .active { 
+            background: var(--card); 
+            color: var(--primary) !important; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+
+        .active-nav { color: var(--primary) !important; font-weight: 800; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white !important;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .safety-warning {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        .safety-warning i { font-size: 20px; }
+        .safety-warning .close-btn {
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .safety-warning .close-btn:hover { opacity: 1; }
+
+        .review-reply {
+            margin-left: 30px;
+            padding: 10px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        #install-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 9999;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            border-radius: 50px;
+            border: none;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        #install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        #install-btn:active {
+            transform: translateY(0);
+        }
+        #install-btn i {
+            font-size: 16px;
+        }
+
+        #offline-fallback {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        #offline-fallback i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        #offline-fallback h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+        #offline-fallback p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        #offline-fallback button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Twitter-Style Verification Badges */
+        .gold-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            margin-left: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .gold-check i {
+            font-size: 10px;
+            color: white;
+        }
+
+        .badge-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+        .badge-gold i {
+            font-size: 10px;
+        }
+
+        .blue-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1da1f2, #1a8cd8);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            margin-left: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .blue-check i {
+            font-size: 10px;
+            color: white;
+        }
+
+        .badge-blue {
+            background: linear-gradient(135deg, #1da1f2, #1a8cd8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 4px rgba(29, 161, 242, 0.3);
+        }
+        .badge-blue i {
+            font-size: 10px;
+        }
+
+        /* Level Badges */
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 6px;
+            color: white;
+        }
+        .level-100 { background: #3b82f6; }
+        .level-200 { background: #10b981; }
+        .level-300 { background: #f59e0b; }
+        .level-400 { background: #ef4444; }
+        .level-500 { background: #8b5cf6; }
+        .level-all { background: #64748b; }
+
+        .dark .gold-check,
+        .dark .badge-gold {
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+        }
+        .dark .blue-check,
+        .dark .badge-blue {
+            box-shadow: 0 2px 8px rgba(29, 161, 242, 0.4);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            position: relative;
+        }
+        .tab {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            position: relative;
+        }
+        .tab:hover {
+            background: var(--input-bg);
+            color: var(--text);
+        }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid var(--card);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Toast Notification */
+        .announcement-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: var(--card);
+            border-left: 4px solid #10b981;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            animation: slideUp 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        .new-announcement {
+            border-left: 4px solid #10b981;
+            transition: border-left-color 0.3s ease;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .delete-btn {
+            transition: all 0.2s;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        .delete-btn:hover {
+            transform: scale(1.1);
+            background: rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Offline Fallback -->
+    <div id="offline-fallback">
+        <i class="fas fa-wifi-slash"></i>
+        <h2>You're Offline</h2>
+        <p>Please check your internet connection and try again.</p>
+        <button onclick="window.location.reload()">Retry</button>
+    </div>
+
+    <!-- Update Banner -->
+    <div id="update-banner" style="display: none; position: fixed; bottom: 100px; left: 20px; right: 20px; background: #10b981; color: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 10000; flex-direction: column; gap: 12px; animation: slideUp 0.3s ease;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-rocket" style="font-size: 20px;"></i>
+            <span style="font-weight: bold;">New features available!</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="updateApp()" style="flex: 2; background: white; color: #10b981; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">
+                Update Now
+            </button>
+            <button onclick="hideUpdateBanner()" style="flex: 1; background: transparent; color: white; border: 1px solid white; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                Later
+            </button>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="terms-modal" class="hidden fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="modal-content p-8 max-w-sm w-full shadow-2xl border border-base" style="background: var(--card); border-color: var(--border);">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-halved text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold" style="color: var(--text);">Campus Rules</h2>
+                <p class="text-xs opacity-60 mt-2" style="color: var(--text-light);">To keep our campus safe, please agree to these terms.</p>
+            </div>
+            <div class="space-y-4 text-sm mb-8">
+                <div class="flex gap-3 items-start"><i class="fas fa-check-circle text-green-500 mt-1"></i><p style="color: var(--text);"><b>Be Real:</b> Authentic posts only.</p></div>
+                <div class="flex gap-3 items-start"><i class="fas fa-check-circle text-green-500 mt-1"></i><p style="color: var(--text);"><b>Safety:</b> Meet in public areas.</p></div>
+                <div class="flex gap-3 items-start"><i class="fas fa-check-circle text-green-500 mt-1"></i><p style="color: var(--text);"><b>No Scams:</b> Immediate permanent ban.</p></div>
+            </div>
+            <button onclick="acceptTerms()" class="w-full btn-premium font-bold py-4 rounded-2xl shadow-lg transition-all">I AGREE & CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Ban Screen -->
+    <div id="ban-screen" class="hidden fixed inset-0 bg-white dark:bg-slate-950 z-[9999] flex flex-col items-center justify-center text-center p-10">
+        <div class="text-red-500 mb-6 bg-red-50 dark:bg-red-950/30 p-6 rounded-full">
+            <i class="fas fa-user-lock text-5xl"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold" style="color: var(--text);">Account Suspended</h1>
+        <p class="opacity-60 mt-4 max-w-xs" style="color: var(--text-light);">You have been flagged for community violations. Please contact admin to appeal.</p>
+        <button onclick="contactDeveloper()" class="mt-8 bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg">Appeal Access</button>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header sticky top-0 z-50 p-4" style="background: rgba(248, 250, 252, 0.9); border-bottom: 1px solid var(--border);">
+        <div class="max-w-5xl mx-auto flex justify-between items-center gap-4">
+            <h1 class="brand-logo text-2xl" onclick="showScreen('browse-screen')">SLIT-HUB</h1>
+            <div class="flex-1 max-w-md relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2" style="color: var(--text-muted);"></i>
+                <input type="text" id="global-search" placeholder="Search campus..." class="w-full bg-input border-none rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 outline-none transition-all" style="background: var(--input-bg); color: var(--text);">
+            </div>
+            <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-input transition-colors" style="background: var(--input-bg);">
+                <i class="fas fa-moon" id="dark-icon" style="color: var(--text);"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" class="hidden text-white py-3 px-4 flex justify-between items-center text-[11px] font-bold shadow-md sticky top-[73px] z-40" style="background: linear-gradient(90deg, #10b981, #34d399);">
+        <div class="flex-1 text-center flex items-center justify-center gap-2">
+            <i class="fas fa-sparkles"></i>
+            <span id="announcement-text">Welcome!</span>
+        </div>
+        <button onclick="this.parentElement.classList.add('hidden')" class="opacity-70 hover:opacity-100"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Safety Warning Banner -->
+    <div id="safety-banner" class="max-w-5xl mx-auto px-4 mt-4">
+        <div class="safety-warning">
+            <i class="fas fa-shield-alt"></i>
+            <div class="flex-1">
+                <strong>⚠️ SAFETY ALERT:</strong> Never pay before seeing the product! Meet in public places like the library, cafeteria, or security post. Report suspicious users immediately.
+            </div>
+            <button onclick="document.getElementById('safety-banner').style.display = 'none'" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-6">
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('browse')">🛍️ Marketplace</button>
+            <button class="tab" onclick="switchTab('feed')">📢 Announcements</button>
+            <button class="tab" onclick="switchTab('departments')">🏛️ Departments</button>
+            <button class="tab" onclick="switchTab('executives')">👥 Executives</button>
+            <button class="tab" onclick="switchTab('settings')">⚙️ Profile</button>
+            <button class="tab" onclick="switchTab('manager')">📋 Manager</button>
+        </div>
+
+        <!-- Browse/Marketplace Screen -->
+        <section id="browse-screen" class="screen">
+            <div class="view-toggle">
+                <button id="toggle-products" class="active" onclick="switchView('Product')">🛍️ Shop</button>
+                <button id="toggle-services" onclick="switchView('Service')">🛠️ Services</button>
+                <button id="toggle-requests" onclick="switchView('Request')">🙋‍♂️ Requests</button>
+            </div>
+            <div class="overflow-x-auto pb-6 no-scrollbar"><div id="category-filter-chips" class="flex gap-2"></div></div>
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+        </section>
+
+        <!-- Feed/Announcements Screen -->
+        <section id="feed-screen" class="screen hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <h2 class="text-2xl font-extrabold" style="color: var(--text);">Announcements</h2>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <select id="filter-department" class="input-field" onchange="filterAnnouncements()">
+                        <option value="all">All Departments</option>
+                    </select>
+                    <select id="filter-level" class="input-field" onchange="filterAnnouncements()">
+                        <option value="all">All Levels</option>
+                        <option value="100">100 Level</option>
+                        <option value="200">200 Level</option>
+                        <option value="300">300 Level</option>
+                        <option value="400">400 Level</option>
+                        <option value="500">500 Level</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Executive Post Card (Only visible to executives) -->
+            <div id="executive-post-card" class="card mb-6 hidden p-6" style="background: var(--card); border-color: var(--border);">
+                <div id="executive-post-header"></div>
+                <div class="space-y-4">
+                    <input type="text" id="announce-title" placeholder="Announcement title" class="input-field">
+                    <textarea id="announce-content" placeholder="Write your announcement..." rows="3" class="input-field"></textarea>
+                    
+                    <!-- Level Selection -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-2 block">Target Level:</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" value="100" class="level-checkbox"> <span class="level-badge level-100">100L</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" value="200" class="level-checkbox"> <span class="level-badge level-200">200L</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" value="300" class="level-checkbox"> <span class="level-badge level-300">300L</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" value="400" class="level-checkbox"> <span class="level-badge level-400">400L</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" value="500" class="level-checkbox"> <span class="level-badge level-500">500L</span>
+                            </label>
+                            <label class="flex items-center gap-1 ml-2">
+                                <input type="checkbox" id="select-all-levels" checked> <span class="text-sm">All Levels</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="announce-link" placeholder="Link (optional)" class="input-field">
+                        <input type="date" id="announce-date" class="input-field">
+                    </div>
+                    <button onclick="postAnnouncement()" class="btn-premium w-full py-3 rounded-xl font-bold">
+                        <i class="fas fa-paper-plane mr-2"></i>Publish Announcement
+                    </button>
+                </div>
+            </div>
+
+            <!-- Announcements Feed -->
+            <div id="announcements-feed" class="space-y-4"></div>
+        </section>
+
+        <!-- Departments Screen -->
+        <section id="departments-screen" class="screen hidden">
+            <h2 class="text-2xl font-extrabold mb-6" style="color: var(--text);">Academic Departments</h2>
+            <div id="departments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- Executives Screen -->
+        <section id="executives-screen" class="screen hidden">
+            <h2 class="text-2xl font-extrabold mb-6" style="color: var(--text);">Student Executives</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="executives-grid"></div>
+        </section>
+
+        <!-- Settings/Profile Screen -->
+        <section id="settings-screen" class="screen hidden max-w-lg mx-auto">
+            <div class="bg-card p-8 rounded-[2.5rem] shadow-xl border border-base" style="background: var(--card); border-color: var(--border);">
+                <div class="text-center mb-8">
+                    <div class="relative inline-block">
+                        <div id="profile-loader"><div class="spinner"></div></div>
+                        <img id="my-profile-pic" src="https://ui-avatars.com/api/?name=User&background=random" class="mx-auto mb-2 border-4 border-white shadow-lg w-24 h-24 rounded-full object-cover">
+                        <div class="flex gap-2 justify-center absolute -bottom-2 w-full">
+                            <button onclick="document.getElementById('profile-upload').click()" class="bg-green-600 text-white p-2.5 rounded-full text-xs border-2 border-white shadow-md"><i class="fas fa-camera"></i></button>
+                            <button id="btn-remove-photo" onclick="removeProfilePic()" class="hidden bg-red-500 text-white p-2.5 rounded-full text-xs border-2 border-white shadow-md"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <input type="file" id="profile-upload" class="hidden" accept="image/*">
+                    </div>
+                    <h2 id="my-profile-name-display" class="font-extrabold text-xl mt-4" style="color: var(--text);">My Profile</h2>
+                    <p class="text-[10px] opacity-40 font-mono mt-1" style="color: var(--text-light);">ID: <span id="display-user-id" class="text-green-600"></span></p>
+                </div>
+                
+                <div class="space-y-5">
+                    <!-- Full Name Field -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-1 block">👤 Full Name</label>
+                        <input type="text" id="set-profile-name" placeholder="Enter your full name" class="w-full bg-input border border-base p-3.5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                    </div>
+                    
+                    <!-- EMAIL FIELD -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-1 block">
+                            📧 Email Address <span class="text-green-500">*</span>
+                            <span class="text-[8px] bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 ml-2 px-2 py-0.5 rounded-full">
+                                Required for executive status
+                            </span>
+                        </label>
+                        <input type="email" id="set-profile-email" placeholder="e.g. john.doe@university.edu.ng" class="w-full bg-input border border-base p-3.5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                        <p class="text-[9px] text-muted mt-1">Use the same email your admin registered for executive access</p>
+                    </div>
+                    
+                    <!-- Department Field -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-1 block">🎓 Department</label>
+                        <input type="text" id="set-profile-dept" placeholder="e.g. Computer Science" class="w-full bg-input border border-base p-3.5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                    </div>
+                    
+                    <!-- LEVEL FIELD -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-1 block">📚 Current Level</label>
+                        <select id="set-profile-level" class="w-full bg-input border border-base p-3.5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                            <option value="">Select your level</option>
+                            <option value="100">100 Level</option>
+                            <option value="200">200 Level</option>
+                            <option value="300">300 Level</option>
+                            <option value="400">400 Level</option>
+                            <option value="500">500 Level</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Bio Field -->
+                    <div>
+                        <label class="text-xs font-bold text-muted mb-1 block">📝 About You</label>
+                        <textarea id="set-profile-bio" placeholder="Tell us about yourself..." rows="3" class="w-full bg-input border border-base p-3.5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></textarea>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <button onclick="saveUserProfile()" class="w-full btn-premium font-bold py-4 rounded-2xl shadow-lg">SAVE PROFILE</button>
+                    
+                    <!-- Executive Status Indicator -->
+                    <div id="executive-status-badge" class="hidden p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center">
+                                <i class="fas fa-check text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <p class="font-bold text-yellow-700 dark:text-yellow-300">Verified Executive</p>
+                                    <span class="gold-check"><i class="fas fa-check"></i></span>
+                                </div>
+                                <p id="executive-position-display" class="text-xs text-muted">Position loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Safety Tips -->
+                    <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl">
+                        <p class="text-[11px] font-extrabold text-yellow-800 dark:text-yellow-200 mb-2">🛡️ SAFETY TIPS</p>
+                        <ul class="text-[10px] space-y-1" style="color: var(--text-light);">
+                            <li>• NEVER pay before seeing the item</li>
+                            <li>• Meet in public places (library, cafeteria)</li>
+                            <li>• Bring a friend if possible</li>
+                            <li>• Check items thoroughly before paying</li>
+                            <li>• Report suspicious users immediately</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Campus Verification -->
+                    <div class="p-5 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-3xl">
+                        <p class="text-[11px] font-extrabold text-green-800 dark:text-green-200 mb-3 tracking-wider">🛡️ CAMPUS VERIFICATION</p>
+                        <div class="flex gap-3">
+                            <button onclick="requestVerification()" class="flex-1 bg-white dark:bg-slate-800 border border-green-600 text-green-600 text-[10px] font-bold py-3 rounded-xl shadow-sm">UPLOAD ID</button>
+                            <a href="https://wa.me/message/O2QERB7C5VE6E1?text=Hello%20Admin%2C%20I%20want%20to%20verify%20my%20account.%20My%20ID%3A%20" target="_blank" class="flex-1 bg-green-500 text-white text-[10px] font-bold py-3 rounded-xl shadow-sm hover:bg-green-600 transition-colors text-center block">
+                                <i class="fab fa-whatsapp mr-1"></i>CHAT ADMIN
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Developer -->
+                    <a href="https://wa.me/message/O2QERB7C5VE6E1?text=Hi%20Developer!%20I%20need%20help%20with%20SLIT-HUB.%20My%20ID%3A%20" target="_blank" class="w-full flex items-center justify-between p-5 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-base hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors no-underline">
+                        <div class="flex items-center gap-3"><i class="fab fa-whatsapp text-2xl text-green-500"></i><p class="text-sm font-bold" style="color: var(--text);">Contact Developer</p></div>
+                        <i class="fas fa-chevron-right text-xs" style="color: var(--text-muted);"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Post Screen -->
+        <section id="post-screen" class="screen hidden max-w-xl mx-auto bg-card p-8 rounded-[2.5rem] shadow-xl border border-base" style="background: var(--card); border-color: var(--border);">
+            <h2 class="text-2xl font-extrabold mb-6" style="color: var(--text);">Create New Listing</h2>
+            
+            <div class="mb-6 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+                <p class="text-[10px] font-bold text-yellow-800 dark:text-yellow-200">
+                    <i class="fas fa-shield-alt mr-1"></i> 
+                    REMEMBER: Never ask for payment before meeting! Meet in public places.
+                </p>
+            </div>
+            
+            <div class="flex gap-2 mb-8 bg-input p-1.5 rounded-2xl" style="background: var(--input-bg);">
+                <label class="flex-1 py-3 rounded-xl text-center text-[11px] font-extrabold uppercase cursor-pointer transition-all"><input type="radio" name="post-type" value="Product" checked class="hidden" onclick="togglePostForm('Product')"><span style="color: var(--text);">🛍️ Product</span></label>
+                <label class="flex-1 py-3 rounded-xl text-center text-[11px] font-extrabold uppercase cursor-pointer transition-all"><input type="radio" name="post-type" value="Service" class="hidden" onclick="togglePostForm('Service')"><span style="color: var(--text);">🛠️ Service</span></label>
+                <label class="flex-1 py-3 rounded-xl text-center text-[11px] font-extrabold uppercase cursor-pointer transition-all"><input type="radio" name="post-type" value="Request" class="hidden" onclick="togglePostForm('Request')"><span style="color: var(--text);">🙋‍♂️ Ask</span></label>
+            </div>
+            
+            <div class="space-y-5">
+                <div id="image-preview-container" class="w-full h-48 border-2 border-dashed border-base rounded-3xl flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-input transition-all" style="border-color: var(--border);">
+                    <img id="image-preview" class="hidden w-full h-full object-cover">
+                    <div id="preview-placeholder" class="text-center">
+                        <i class="fas fa-cloud-arrow-up text-3xl text-green-500 mb-2"></i>
+                        <p class="text-[11px] font-bold" style="color: var(--text-muted);">Tap to upload photo</p>
+                    </div>
+                </div>
+                <input type="file" id="file-input" class="hidden">
+                <input type="text" id="post-title" placeholder="What are you listing?" class="w-full bg-input border border-base p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                <textarea id="post-desc" placeholder="Details (Condition, size, etc.)..." class="w-full bg-input border border-base p-4 rounded-2xl text-sm h-32 outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold" style="color: var(--text-muted);">₦</span>
+                        <input type="number" id="post-price" placeholder="Price" class="w-full bg-input border border-base pl-10 pr-4 py-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                    </div>
+                    <select id="post-negotiable" class="w-full bg-input border border-base px-4 py-4 rounded-2xl text-sm outline-none" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                        <option value="Fixed">Fixed Price</option>
+                        <option value="Negotiable">Negotiable</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="post-category" class="w-full bg-input border border-base px-4 py-4 rounded-2xl text-sm outline-none" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></select>
+                    <select id="post-condition" class="w-full bg-input border border-base px-4 py-4 rounded-2xl text-sm outline-none" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></select>
+                </div>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-green-600">+234</span>
+                    <input type="tel" id="post-phone" placeholder="Phone number (e.g. 8051234567)" class="w-full bg-input border border-base pl-16 pr-4 py-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                </div>
+                <input type="text" id="post-location" placeholder="📍 Campus Location" class="w-full bg-input border border-base p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                <button id="btn-post" class="w-full btn-premium font-extrabold py-4 rounded-2xl shadow-xl mt-4">PUBLISH NOW</button>
+            </div>
+        </section>
+
+        <!-- Edit Screen -->
+        <section id="edit-screen" class="screen hidden max-w-xl mx-auto bg-card p-8 rounded-[2.5rem] shadow-xl border border-base" style="background: var(--card); border-color: var(--border);">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-extrabold" style="color: var(--text);">Edit Listing</h2>
+                <button onclick="showScreen('my-items-screen')" class="text-xs opacity-50 font-bold hover:opacity-100" style="color: var(--text-muted);">CANCEL</button>
+            </div>
+            <div class="space-y-5">
+                <input type="hidden" id="edit-product-id">
+                <div id="edit-image-preview-container" class="w-full h-48 border-2 border-dashed border-base rounded-3xl overflow-hidden cursor-pointer" style="border-color: var(--border);">
+                    <img id="edit-image-preview" class="w-full h-full object-cover">
+                </div>
+                <input type="file" id="edit-file-input" class="hidden">
+                <input type="text" id="edit-title" placeholder="Title" class="w-full bg-input border border-base p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                <textarea id="edit-desc" placeholder="Details..." class="w-full bg-input border border-base p-4 rounded-2xl text-sm h-32 outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold" style="color: var(--text-muted);">₦</span>
+                        <input type="number" id="edit-price" class="w-full bg-input border border-base pl-10 pr-4 py-4 rounded-2xl text-sm outline-none" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                    </div>
+                    <select id="edit-sold-status" class="w-full bg-input border border-base px-4 py-4 rounded-2xl text-sm outline-none" style="background: var(--input-bg); color: var(--text); border-color: var(--border);">
+                        <option value="false">Available</option>
+                        <option value="true">Mark as Sold</option>
+                    </select>
+                </div>
+                <button id="btn-update-post" onclick="processUpdateProduct()" class="w-full btn-premium font-extrabold py-4 rounded-2xl shadow-xl mt-4">SAVE CHANGES</button>
+            </div>
+        </section>
+
+        <!-- Manager Screen -->
+        <section id="my-items-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-extrabold" style="color: var(--text);">Manager</h2>
+                <button onclick="toggleAdminMode()" id="admin-toggle-btn" class="text-[9px] bg-input px-3 py-1.5 rounded-full font-bold uppercase tracking-widest" style="background: var(--input-bg); color: var(--text);">Admin: OFF</button>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div id="admin-quick-stats" class="hidden mb-6">
+                <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6 rounded-2xl text-white">
+                    <h3 class="text-sm font-bold mb-4">Quick Stats</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <p class="text-3xl font-bold" id="stat-departments">0</p>
+                            <p class="text-sm opacity-90">Departments</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold" id="stat-executives">0</p>
+                            <p class="text-sm opacity-90">Executives</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold" id="stat-announcements">0</p>
+                            <p class="text-sm opacity-90">Announcements</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold" id="stat-products">0</p>
+                            <p class="text-sm opacity-90">Products</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Admin Panel -->
+            <div id="admin-panel" class="hidden mb-10 space-y-6">
+                
+                <!-- Global Broadcast with DELETE button -->
+                <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6 rounded-2xl text-white shadow-xl relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xs font-extrabold uppercase">📢 Global Broadcast</h3>
+                        <button onclick="deleteGlobalBroadcast()" class="bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all" title="Delete broadcast">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <textarea id="admin-announcement-input" class="w-full p-4 rounded-2xl text-slate-900 text-sm h-20 mb-3 outline-none" placeholder="Broadcast message..."></textarea>
+                    <button onclick="updateAnnouncement()" class="bg-white text-green-600 px-8 py-2.5 rounded-xl text-[10px] font-bold shadow-lg hover:bg-gray-100 transition-colors">PUSH NOTIFICATION</button>
+                </div>
+
+                <!-- Department Management -->
+                <div class="bg-card p-6 border border-base rounded-2xl shadow-sm" style="background: var(--card); border-color: var(--border);">
+                    <h3 class="text-sm font-bold mb-4 text-green-600 flex items-center gap-2">
+                        <i class="fas fa-building"></i> Department Management
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                        <input type="text" id="dept-name" placeholder="Department Name" class="input-field">
+                        <input type="text" id="dept-code" placeholder="Department Code" class="input-field">
+                        <button onclick="addDepartment()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-bold">
+                            <i class="fas fa-plus mr-2"></i>Add Department
+                        </button>
+                    </div>
+                    
+                    <div id="departments-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                </div>
+
+                <!-- Executive Management -->
+                <div class="bg-card p-6 border border-base rounded-2xl shadow-sm" style="background: var(--card); border-color: var(--border);">
+                    <h3 class="text-sm font-bold mb-4 text-green-600 flex items-center gap-2">
+                        <i class="fas fa-user-tie"></i> Executive Management 
+                        <span class="badge-gold"><i class="fas fa-check"></i> GOLD</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                        <select id="exec-dept" class="input-field">
+                            <option value="">Select Department</option>
+                        </select>
+                        <input type="text" id="exec-name" placeholder="Full Name" class="input-field">
+                        <input type="text" id="exec-position" placeholder="Position" class="input-field">
+                        <input type="email" id="exec-email" placeholder="Email" class="input-field">
+                        <input type="tel" id="exec-phone" placeholder="Phone" class="input-field">
+                        <button onclick="addExecutive()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-bold">
+                            <i class="fas fa-plus mr-2"></i>Add Executive
+                        </button>
+                    </div>
+                    
+                    <div id="executives-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                </div>
+
+                <!-- Member Directory -->
+                <div class="bg-card p-6 border border-base rounded-2xl shadow-sm" style="background: var(--card); border-color: var(--border);">
+                    <h3 class="text-xs font-extrabold uppercase mb-4 text-green-600">Member Directory</h3>
+                    <div id="admin-user-list" class="space-y-3 max-h-80 overflow-y-auto no-scrollbar"></div>
+                </div>
+
+                <!-- Verification Requests -->
+                <div class="bg-card p-6 border border-base rounded-2xl shadow-sm" style="background: var(--card); border-color: var(--border);">
+                    <h3 class="text-xs font-extrabold uppercase mb-4 text-green-600">📋 VERIFICATION REQUESTS</h3>
+                    <div id="admin-verification-list" class="space-y-3 max-h-80 overflow-y-auto no-scrollbar"></div>
+                </div>
+
+                <!-- Reports & Flagged -->
+                <div class="bg-card p-6 border border-base rounded-2xl shadow-sm" style="background: var(--card); border-color: var(--border);">
+                    <h3 class="text-xs font-extrabold uppercase mb-4 text-red-600">Reports & Flagged</h3>
+                    <div id="admin-reports-list" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- My Items Grid -->
+            <div id="my-items-grid" class="grid grid-cols-1 gap-4"></div>
+        </section>
+
+        <!-- Product Details Screen -->
+        <section id="details-screen" class="screen hidden bg-card rounded-[2.5rem] shadow-2xl overflow-hidden pb-12 border border-base" style="background: var(--card); border-color: var(--border);">
+            <div id="details-content"></div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-nav flex justify-around py-4 z-50" style="background: rgba(255,255,255,0.92); border-top: 1px solid var(--border);">
+        <button onclick="showScreen('browse-screen')" class="nav-item flex flex-col items-center relative">
+            <i class="fas fa-home text-lg mb-1" style="color: var(--nav-text);"></i>
+            <span class="text-[9px] font-bold" style="color: var(--nav-text);">Home</span>
+        </button>
+        <button onclick="startNewPost()" class="nav-item flex flex-col items-center relative">
+            <i class="fas fa-plus-circle text-2xl text-green-600 mb-1"></i>
+            <span class="text-[9px] font-bold" style="color: var(--nav-text);">Post</span>
+        </button>
+        <button onclick="loadMyItems()" class="nav-item flex flex-col items-center relative">
+            <i class="fas fa-grid-2 text-lg mb-1" style="color: var(--nav-text);"></i>
+            <span class="text-[9px] font-bold" style="color: var(--nav-text);">Manager</span>
+        </button>
+        <a href="https://wa.me/message/O2QERB7C5VE6E1?text=Hello%20Admin%2C%20I%20need%20help%20with%20SLIT-HUB.%20My%20ID%3A%20" target="_blank" class="nav-item flex flex-col items-center relative no-underline">
+            <i class="fas fa-comment-dots text-lg mb-1 text-green-500"></i>
+            <span class="text-[9px] font-bold" style="color: var(--nav-text);">Admin</span>
+        </a>
+        <button onclick="showScreen('settings-screen')" class="nav-item flex flex-col items-center relative">
+            <i class="fas fa-user-circle text-lg mb-1" style="color: var(--nav-text);"></i>
+            <span class="text-[9px] font-bold" style="color: var(--nav-text);">Me</span>
+        </button>
+    </nav>
+
+    <!-- Install App Button -->
+    <button id="install-btn">
+        <i class="fas fa-download"></i> Install Slit-Hub App
+    </button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, query, orderBy, onSnapshot, where, serverTimestamp, doc, getDoc, deleteDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpsDTN-NTkTFmbwg3T6vv9H4eE_YXQdZA",
+            authDomain: "slit-hub.firebaseapp.com",
+            projectId: "slit-hub",
+            storageBucket: "slit-hub.firebasestorage.app",
+            messagingSenderId: "347194010969",
+            appId: "1:347194010969:web:a45af2e8d1627ac2593048"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Check if online
+        function checkOnlineStatus() {
+            const offlineFallback = document.getElementById('offline-fallback');
+            const mainContent = document.querySelector('main');
+            
+            if (!navigator.onLine) {
+                offlineFallback.style.display = 'block';
+                if (mainContent) mainContent.style.display = 'none';
+            } else {
+                offlineFallback.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+            }
+        }
+
+        window.addEventListener('online', checkOnlineStatus);
+        window.addEventListener('offline', checkOnlineStatus);
+        checkOnlineStatus();
+
+        // Update banner functions
+        window.hideUpdateBanner = () => {
+            document.getElementById('update-banner').style.display = 'none';
+        };
+
+        window.updateApp = () => {
+            window.location.reload();
+        };
+
+        // Check for updates
+        if ('serviceWorker' in navigator) {
+            let refreshing = false;
+            
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                refreshing = true;
+                document.getElementById('update-banner').style.display = 'flex';
+                
+                setTimeout(() => {
+                    if (document.getElementById('update-banner').style.display === 'flex') {
+                        hideUpdateBanner();
+                    }
+                }, 60000);
+            });
+            
+            setInterval(() => {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.update();
+                });
+            }, 60 * 60 * 1000);
+        }
+
+        // User ID
+        let currentUserId = localStorage.getItem('slit_user_id');
+        if (!currentUserId || currentUserId.length < 8 || !currentUserId.startsWith('user_')) {
+            currentUserId = "user_" + Date.now() + "_" + Math.floor(Math.random() * 9999);
+            localStorage.setItem('slit_user_id', currentUserId);
+        }
+
+        let activeProductListener = null;
+        let activeMyItemsListener = null;
+        let isAdminMode = false;
+        let verifiedSellers = [];
+        let currentView = 'Product';
+        let selectedCategory = 'All';
+        let isUserBanned = false;
+        
+        // Notification tracking
+        let lastSeenAnnouncementTime = parseInt(localStorage.getItem('lastSeenAnnouncement')) || 0;
+        let unreadAnnouncementCount = 0;
+
+        document.getElementById('display-user-id').innerText = currentUserId;
+
+        // Detect standalone mode (installed app)
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('App is running in standalone mode');
+            document.body.classList.add('installed-app');
+        }
+
+        // Tab switching
+        window.switchTab = (tabId) => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            
+            if (tabId === 'browse') document.getElementById('browse-screen').classList.remove('hidden');
+            if (tabId === 'feed') {
+                document.getElementById('feed-screen').classList.remove('hidden');
+                // Mark announcements as read when viewing feed
+                setTimeout(() => {
+                    markAnnouncementsAsRead();
+                    updateAnnouncementBadge(0);
+                }, 1000);
+            }
+            if (tabId === 'departments') document.getElementById('departments-screen').classList.remove('hidden');
+            if (tabId === 'executives') document.getElementById('executives-screen').classList.remove('hidden');
+            if (tabId === 'settings') {
+                document.getElementById('settings-screen').classList.remove('hidden');
+                // Check executive status when viewing settings
+                setTimeout(() => {
+                    checkExecutiveStatus();
+                }, 500);
+            }
+            if (tabId === 'manager') document.getElementById('my-items-screen').classList.remove('hidden');
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        // Update announcement badge
+        function updateAnnouncementBadge(count) {
+            const announcementTab = document.querySelector('.tab[onclick="switchTab(\'feed\')"]');
+            if (!announcementTab) return;
+            
+            const existingBadge = announcementTab.querySelector('.notification-badge');
+            if (existingBadge) existingBadge.remove();
+            
+            if (count > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'notification-badge';
+                badge.textContent = count > 99 ? '99+' : count;
+                announcementTab.style.position = 'relative';
+                announcementTab.appendChild(badge);
+            }
+        }
+
+        // Show toast notification
+        function showAnnouncementToast(announcement) {
+            const toast = document.createElement('div');
+            toast.className = 'announcement-toast';
+            
+            const time = announcement.createdAt ? 
+                new Date(announcement.createdAt.seconds * 1000).toLocaleTimeString() : 'Just now';
+            
+            toast.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-bold text-green-600">${announcement.departmentName || 'New'}</span>
+                            <span class="text-[8px] text-muted">${time}</span>
+                        </div>
+                        <p class="font-bold text-sm truncate" style="color: var(--text);">${announcement.title}</p>
+                        <p class="text-xs text-muted truncate">${announcement.content.substring(0, 50)}...</p>
+                    </div>
+                    <button class="toast-close text-muted hover:text-text">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            toast.querySelector('.toast-close').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toast.remove();
+            });
+            
+            toast.addEventListener('click', () => {
+                switchTab('feed');
+                toast.remove();
+            });
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.animation = 'slideDown 0.3s ease forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Mark announcements as read
+        function markAnnouncementsAsRead() {
+            lastSeenAnnouncementTime = Date.now();
+            localStorage.setItem('lastSeenAnnouncement', lastSeenAnnouncementTime);
+            unreadAnnouncementCount = 0;
+            updateAnnouncementBadge(0);
+        }
+
+        // Dark mode toggle
+        window.toggleDarkMode = () => {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('dark-mode', isDark);
+            const icon = document.getElementById('dark-icon');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        };
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('dark-icon').className = 'fas fa-sun';
+        }
+
+        // Terms
+        window.onload = () => {
+            if (!localStorage.getItem('slit_terms_accepted')) {
+                document.getElementById('terms-modal').classList.remove('hidden');
+            }
+            
+            loadProducts();
+            loadAnnouncements();
+            loadDepartments();
+            loadExecutives();
+            loadStats();
+            
+            // Check executive status on load
+            setTimeout(() => {
+                checkExecutiveStatus();
+            }, 2000);
+        };
+        
+        window.acceptTerms = () => {
+            localStorage.setItem('slit_terms_accepted', 'true');
+            document.getElementById('terms-modal').classList.add('hidden');
+        };
+
+        // Categories
+        const categories = {
+            Product: ["All","💻 Tech & Gadgets","📚 Textbooks","👕 Thrift & Fashion","🏠 Hostel Gear","🛋️ Furniture","🍳 Cooking & Kitchen","⚽ Sports/Hobby","✨ Cosmetics","➕ Others"],
+            Service: ["All","✂️ Barbing & Hair","🧼 Laundry","👨‍🏫 Tutoring","🎨 Graphics/Tech","🧹 Cleaning","🚚 Delivery","📸 Photography","➕ Others"],
+            Request: ["All","💰 Buy Request","🛠️ Service Needed","🚑 Urgent Help","👫 Study Partner","➕ Others"]
+        };
+
+        // Listeners
+        onSnapshot(doc(db, "BannedUsers", currentUserId), snap => {
+            document.getElementById('ban-screen').classList.toggle('hidden', !snap.exists());
+            isUserBanned = snap.exists();
+        });
+
+        onSnapshot(collection(db, "VerifiedUsers"), snap => {
+            verifiedSellers = snap.docs.map(d => d.id);
+        });
+
+        onSnapshot(doc(db, "Users", currentUserId), snap => {
+            if (snap.exists()) {
+                const d = snap.data();
+                document.getElementById('my-profile-pic').src = d.photo || `https://ui-avatars.com/api/?name=${currentUserId}`;
+                document.getElementById('btn-remove-photo').classList.toggle('hidden', !d.photo);
+                document.getElementById('set-profile-name').value = d.name || '';
+                document.getElementById('set-profile-email').value = d.email || '';
+                document.getElementById('set-profile-dept').value = d.dept || '';
+                document.getElementById('set-profile-level').value = d.level || '';
+                document.getElementById('set-profile-bio').value = d.bio || '';
+                if (d.name) document.getElementById('my-profile-name-display').innerText = d.name;
+                
+                checkExecutiveStatus();
+            }
+        });
+
+        onSnapshot(doc(db, "AppData", "Announcement"), snap => {
+            const bar = document.getElementById('announcement-bar');
+            if (snap.exists() && snap.data().active) {
+                bar.classList.remove('hidden');
+                document.getElementById('announcement-text').innerText = snap.data().message;
+            } else {
+                bar.classList.add('hidden');
+            }
+        });
+
+        // WhatsApp Chat
+        window.startChat = (phone, sellerName, productTitle, productPrice) => {
+            if (!phone) {
+                alert("This seller hasn't provided a phone number.");
+                return;
+            }
+            let cleanPhone = phone.replace(/[^0-9]/g, '');
+            if (cleanPhone.startsWith('0')) {
+                cleanPhone = '234' + cleanPhone.substring(1);
+            } else if (!cleanPhone.startsWith('234')) {
+                cleanPhone = '234' + cleanPhone;
+            }
+            const message = encodeURIComponent(
+                `Hello ${sellerName || 'Seller'}, I'm interested in your product: *${productTitle}* for ₦${productPrice}. Is it still available? I will ONLY pay after seeing the product in person.`
+            );
+            window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+        };
+
+        // Reply to Review
+        window.replyToReview = async (productId, reviewId, reviewerName) => {
+            const replyText = prompt(`Reply to ${reviewerName}:`);
+            if (!replyText) return;
+            try {
+                const replyRef = collection(db, "Products", productId, "Reviews", reviewId, "Replies");
+                await addDoc(replyRef, {
+                    text: replyText,
+                    sellerId: currentUserId,
+                    sellerName: document.getElementById('set-profile-name').value || 'Seller',
+                    timestamp: serverTimestamp()
+                });
+                alert("Reply posted successfully!");
+            } catch (e) {
+                alert("Failed to post reply.");
+            }
+        };
+
+        // Screen navigation
+        window.showScreen = screenId => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            document.querySelectorAll('nav button, nav a').forEach(b => b.classList.remove('active-nav'));
+            const map = { 'browse-screen': 0, 'post-screen': 1, 'my-items-screen': 2, 'settings-screen': 4 };
+            if (map[screenId] !== undefined) {
+                document.querySelectorAll('nav button')[map[screenId]].classList.add('active-nav');
+            }
+            window.scrollTo(0, 0);
+        };
+
+        // Profile
+        document.getElementById('profile-upload').onchange = async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const loader = document.getElementById('profile-loader');
+            loader.style.display = 'flex';
+            try {
+                const url = await uploadToCloudinary(file);
+                await setDoc(doc(db, "Users", currentUserId), { photo: url }, { merge: true });
+                document.getElementById('my-profile-pic').src = url;
+            } catch (err) {
+                alert("Upload failed.");
+            }
+            loader.style.display = 'none';
+        };
+
+        window.removeProfilePic = async () => {
+            if (confirm("Remove profile photo?")) {
+                await updateDoc(doc(db, "Users", currentUserId), { photo: null });
+                document.getElementById('my-profile-pic').src = `https://ui-avatars.com/api/?name=${currentUserId}`;
+                document.getElementById('btn-remove-photo').classList.add('hidden');
+            }
+        };
+
+        // Link executive to user
+        window.linkExecutiveToUser = async () => {
+            const email = document.getElementById('set-profile-email')?.value;
+            if (!email) return false;
+            
+            try {
+                const execSnap = await getDocs(query(
+                    collection(db, "executives"), 
+                    where("email", "==", email)
+                ));
+                
+                if (!execSnap.empty) {
+                    const execDoc = execSnap.docs[0];
+                    const execData = execDoc.data();
+                    
+                    await updateDoc(doc(db, "executives", execDoc.id), {
+                        userId: currentUserId,
+                        lastActive: serverTimestamp()
+                    });
+                    
+                    console.log("✅ Executive linked successfully:", execData.name);
+                    
+                    await updateDoc(doc(db, "Users", currentUserId), {
+                        executiveId: execDoc.id,
+                        executivePosition: execData.position,
+                        isExecutive: true
+                    });
+                    
+                    return true;
+                }
+            } catch (error) {
+                console.error("Error linking executive:", error);
+            }
+            return false;
+        };
+
+        // Save user profile
+        window.saveUserProfile = async () => {
+            if (isUserBanned) return;
+            
+            const name = document.getElementById('set-profile-name').value.trim();
+            const email = document.getElementById('set-profile-email').value.trim();
+            const dept = document.getElementById('set-profile-dept').value.trim();
+            const level = document.getElementById('set-profile-level').value;
+            const bio = document.getElementById('set-profile-bio').value.trim();
+            
+            await setDoc(doc(db, "Users", currentUserId), { 
+                name, 
+                email, 
+                dept, 
+                level,
+                bio 
+            }, { merge: true });
+            
+            alert("Profile Updated! ✨");
+            
+            // Link executive and check status
+            await linkExecutiveToUser();
+            await checkExecutiveStatus();
+            
+            // Reload announcements to update any executive badges
+            loadAnnouncements();
+        };
+
+        // Check if current user is an executive
+        window.checkExecutiveStatus = async () => {
+            const email = document.getElementById('set-profile-email')?.value;
+            if (!email) return;
+            
+            console.log("Checking executive status for email:", email);
+            
+            // First check by userId
+            let execSnap = await getDocs(query(
+                collection(db, "executives"), 
+                where("userId", "==", currentUserId)
+            ));
+            
+            // If not found by userId, check by email
+            if (execSnap.empty) {
+                execSnap = await getDocs(query(
+                    collection(db, "executives"), 
+                    where("email", "==", email)
+                ));
+                
+                // If found by email, link it!
+                if (!execSnap.empty) {
+                    const execDoc = execSnap.docs[0];
+                    await updateDoc(doc(db, "executives", execDoc.id), {
+                        userId: currentUserId
+                    });
+                    console.log("✅ Executive linked via email check");
+                }
+            }
+            
+            const badge = document.getElementById('executive-status-badge');
+            const positionDisplay = document.getElementById('executive-position-display');
+            const execPostCard = document.getElementById('executive-post-card');
+            const execHeader = document.getElementById('executive-post-header');
+            
+            if (!execSnap.empty) {
+                const exec = execSnap.docs[0].data();
+                console.log("Executive found:", exec);
+                
+                badge.classList.remove('hidden');
+                positionDisplay.textContent = `${exec.position} • ${exec.name}`;
+                
+                // SHOW THE EXECUTIVE POST CARD!
+                if (execPostCard) {
+                    execPostCard.classList.remove('hidden');
+                    if (execHeader) {
+                        execHeader.innerHTML = `
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold text-green-600 flex items-center gap-2">
+                                    <i class="fas fa-pen"></i> POST ANNOUNCEMENT
+                                </h3>
+                                <span class="badge-gold flex items-center gap-1">
+                                    <i class="fas fa-check"></i> 
+                                    ${exec.position} • ${exec.name}
+                                </span>
+                            </div>
+                        `;
+                    }
+                }
+                
+                await updateDoc(doc(db, "Users", currentUserId), {
+                    executiveId: execSnap.docs[0].id,
+                    executivePosition: exec.position
+                });
+            } else {
+                console.log("No executive found for this email");
+                badge.classList.add('hidden');
+                if (execPostCard) {
+                    execPostCard.classList.add('hidden');
+                }
+            }
+        };
+
+        // Upload ID function
+        window.requestVerification = async () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("File too large! Max 5MB.");
+                    return;
+                }
+                
+                try {
+                    const url = await uploadToCloudinary(file);
+                    
+                    const userSnap = await getDoc(doc(db, "Users", currentUserId));
+                    const userName = userSnap.exists() ? userSnap.data().name : 'Unknown';
+                    
+                    await setDoc(doc(db, "VerificationRequests", currentUserId), {
+                        userId: currentUserId,
+                        userName: userName,
+                        idImage: url,
+                        timestamp: serverTimestamp(),
+                        status: 'pending'
+                    });
+                    
+                    alert("✅ ID Uploaded! Admin will verify soon.");
+                } catch (err) {
+                    console.error(err);
+                    alert("❌ Upload failed. Make sure your Cloudinary preset is 'unsigned'.");
+                }
+            };
+            input.click();
+        };
+
+        // Cloudinary upload
+        async function uploadToCloudinary(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'SLIT-HUB');
+            
+            const res = await fetch('https://api.cloudinary.com/v1_1/ddm87a9p2/image/upload', { 
+                method: 'POST', 
+                body: formData 
+            });
+            
+            if (!res.ok) throw new Error("Upload failed");
+            const data = await res.json();
+            return data.secure_url;
+        }
+
+        // Post listing
+        const fileInput = document.getElementById('file-input');
+        const imagePreview = document.getElementById('image-preview');
+        document.getElementById('image-preview-container').onclick = () => fileInput.click();
+        fileInput.onchange = e => {
+            const reader = new FileReader();
+            reader.onload = ev => {
+                imagePreview.src = ev.target.result;
+                imagePreview.classList.remove('hidden');
+                document.getElementById('preview-placeholder').classList.add('hidden');
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        window.startNewPost = () => {
+            if (isUserBanned) return;
+            togglePostForm('Product');
+            showScreen('post-screen');
+        };
+
+        window.togglePostForm = type => {
+            const catSelect = document.getElementById('post-category');
+            catSelect.innerHTML = categories[type].filter(c => c !== "All").map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('post-condition').innerHTML = type === 'Product'
+                ? '<option value="New">New</option><option value="Used">Used</option>'
+                : '<option value="Standard">Standard</option>';
+        };
+
+        document.getElementById('btn-post').onclick = async () => {
+            if (isUserBanned) return;
+            
+            const phone = document.getElementById('post-phone').value.trim();
+            if (!phone) {
+                alert("Please enter your phone number!");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-post');
+            btn.innerText = "Publishing..."; btn.disabled = true;
+            
+            try {
+                let imageUrl = "https://placehold.co/600x400?text=Post";
+                if (fileInput.files[0]) imageUrl = await uploadToCloudinary(fileInput.files[0]);
+                const postType = document.querySelector('input[name="post-type"]:checked').value;
+                
+                await addDoc(collection(db, "Products"), {
+                    Title: document.getElementById('post-title').value,
+                    Description: document.getElementById('post-desc').value,
+                    Price: document.getElementById('post-price').value,
+                    Negotiable: document.getElementById('post-negotiable').value,
+                    Category: document.getElementById('post-category').value,
+                    Condition: document.getElementById('post-condition').value,
+                    Phone: phone,
+                    Location: document.getElementById('post-location').value,
+                    ImageURL: imageUrl,
+                    SellerId: currentUserId,
+                    PostType: postType,
+                    Rating: 0, ReviewCount: 0,
+                    CreatedAt: serverTimestamp(),
+                    IsSold: false
+                });
+                
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-desc').value = '';
+                document.getElementById('post-price').value = '';
+                document.getElementById('post-phone').value = '';
+                document.getElementById('post-location').value = '';
+                imagePreview.classList.add('hidden');
+                document.getElementById('preview-placeholder').classList.remove('hidden');
+                
+                alert("Listing published!");
+                showScreen('browse-screen');
+            } catch (e) {
+                alert("Error publishing.");
+            }
+            btn.innerText = "PUBLISH NOW"; btn.disabled = false;
+        };
+
+        // Load products
+        window.switchView = view => {
+            currentView = view;
+            selectedCategory = 'All';
+            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`toggle-${view.toLowerCase()}s`).classList.add('active');
+            renderCategoryChips();
+            loadProducts();
+        };
+
+        function renderCategoryChips() {
+            document.getElementById('category-filter-chips').innerHTML = categories[currentView].map(c => `
+                <button onclick="setCategoryFilter('${c}')" class="chip px-5 py-2.5 rounded-full text-[11px] font-bold border border-base whitespace-nowrap ${selectedCategory === c ? 'bg-green-600 text-white shadow-lg' : 'bg-card'}" style="border-color: var(--border); background: ${selectedCategory === c ? '#10b981' : 'var(--card)'}; color: ${selectedCategory === c ? 'white' : 'var(--text)'};">${c}</button>
+            `).join('');
+        }
+
+        window.setCategoryFilter = cat => { selectedCategory = cat; renderCategoryChips(); loadProducts(); };
+
+        function loadProducts() {
+            const container = document.getElementById("product-grid");
+            if (!container) return;
+            container.innerHTML = '<div class="skeleton-card animate-pulse"></div>'.repeat(4);
+
+            if (activeProductListener) { activeProductListener(); activeProductListener = null; }
+
+            activeProductListener = onSnapshot(
+                query(collection(db, "Products"), orderBy("CreatedAt", "desc")),
+                snapshot => {
+                    let docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
+                        .filter(d => d.PostType === currentView);
+                    if (selectedCategory !== 'All') docs = docs.filter(d => d.Category === selectedCategory);
+
+                    container.innerHTML = '';
+                    if (docs.length === 0) {
+                        container.innerHTML = `<div class="col-span-full py-20 text-center opacity-40"><i class="fas fa-box-open text-4xl" style="color: var(--text-muted);"></i><p class="font-bold" style="color: var(--text);">No items found.</p></div>`;
+                        return;
+                    }
+                    docs.forEach(product => {
+                        const isVer = verifiedSellers.includes(product.SellerId);
+                        const avgRating = product.ReviewCount > 0 ? (product.Rating / product.ReviewCount).toFixed(1) : "0";
+                        const card = document.createElement("div");
+                        card.className = "product-card";
+                        card.innerHTML = `
+                            ${product.IsSold ? '<div class="sold-overlay">SOLD</div>' : ''}
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="${product.ImageURL}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" onclick="viewProduct('${product.id}')">
+                            </div>
+                            <div class="p-3">
+                                <h3 class="font-bold text-[11px] truncate mb-1" style="color: var(--text);">
+                                    ${product.Title}
+                                    ${isVer ? `
+                                        <span class="blue-check ml-1" title="Verified Seller">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    ` : ''}
+                                </h3>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-green-600 font-extrabold text-sm">₦${product.Price}</span>
+                                    <div class="flex items-center text-[8px] text-yellow-500 font-bold bg-yellow-50 dark:bg-yellow-950/20 px-1.5 py-0.5 rounded"><i class="fas fa-star mr-1"></i>${avgRating}</div>
+                                </div>
+                                <div class="flex items-center text-[9px] opacity-40 uppercase font-bold" style="color: var(--text-muted);">
+                                    <i class="fas fa-location-dot mr-1 text-[7px]"></i>${product.Location || 'Campus'}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            );
+        }
+
+        // View product details
+        window.viewProduct = async id => {
+            const snap = await getDoc(doc(db, "Products", id));
+            if (!snap.exists()) return;
+            const p = snap.data();
+            const uSnap = await getDoc(doc(db, "Users", p.SellerId));
+            const u = uSnap.exists() ? uSnap.data() : {};
+            const isMyProduct = p.SellerId === currentUserId;
+            const avgRating = p.ReviewCount > 0 ? (p.Rating / p.ReviewCount).toFixed(1) : "0";
+            const isVer = verifiedSellers.includes(p.SellerId);
+            const sellerName = (u.name || 'Campus Student').replace(/'/g, "\\'");
+
+            document.getElementById('details-content').innerHTML = `
+                <div class="relative h-72">
+                    <img src="${p.ImageURL}" class="w-full h-full object-cover">
+                    <button onclick="showScreen('browse-screen')" class="absolute top-5 left-5 w-10 h-10 bg-white/30 backdrop-blur-md rounded-full text-white flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="p-6">
+                    <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                        <p class="text-[11px] font-bold text-red-600 dark:text-red-400">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                            ⚠️ SAFETY FIRST: Never pay before seeing the item! Meet in a public place on campus.
+                        </p>
+                    </div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h2 class="text-2xl font-extrabold" style="color: var(--text);">${p.Title}${isVer ? ' <span class="blue-check ml-1" title="Verified Seller"><i class="fas fa-check"></i></span>' : ''}</h2>
+                            <p class="text-[10px] opacity-50 font-bold uppercase tracking-widest mt-1" style="color: var(--text-muted);">${p.Category}</p>
+                        </div>
+                        <p class="text-green-600 text-2xl font-black">₦${p.Price}</p>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 bg-input rounded-2xl mb-8 border border-base" style="background: var(--input-bg); border-color: var(--border);">
+                        <img src="${u.photo || 'https://ui-avatars.com/api/?name=User'}" class="w-12 h-12 rounded-full border-2 border-white">
+                        <div class="flex-1">
+                            <p class="text-xs font-extrabold" style="color: var(--text);">${u.name || 'Campus Student'}</p>
+                            <p class="text-[9px] text-yellow-500 font-bold"><i class="fas fa-star mr-1"></i>${avgRating} (${p.ReviewCount || 0} reviews)</p>
+                        </div>
+                        ${!isMyProduct ? `<button onclick="reportUser('${p.SellerId}')" class="text-[9px] font-bold text-red-500 bg-red-50 dark:bg-red-950/20 px-3 py-1.5 rounded-lg border border-red-100 dark:border-red-900/40">REPORT</button>` : ''}
+                    </div>
+                    <div class="mb-10">
+                        <h4 class="text-[10px] font-extrabold uppercase opacity-40 mb-2" style="color: var(--text-muted);">Description</h4>
+                        <p class="text-sm leading-relaxed" style="color: var(--text);">${p.Description}</p>
+                    </div>
+                    <div class="mt-8 mb-8">
+                        <h3 class="text-sm font-extrabold mb-4 uppercase tracking-wider opacity-60" style="color: var(--text-muted);">Other listings from this seller</h3>
+                        <div id="more-from-seller-grid" class="grid grid-cols-2 gap-4"></div>
+                    </div>
+                    <div class="mt-10 border-t border-base pt-6 mb-12" style="border-color: var(--border);">
+                        <h3 class="font-extrabold text-sm mb-6 uppercase tracking-widest opacity-60" style="color: var(--text-muted);">Student Reviews</h3>
+                        <div id="reviews-placeholder" class="space-y-4"></div>
+                    </div>
+                    ${isMyProduct ? `
+                        <div class="p-5 bg-green-50 dark:bg-green-900/20 rounded-2xl text-center border border-green-100 dark:border-green-800">
+                            <p class="text-xs font-bold text-green-700 dark:text-green-300">You posted this listing.</p>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <button onclick="startChat('${p.Phone}', '${sellerName}', '${p.Title.replace(/'/g, "\\'")}', '${p.Price}')" class="btn-premium font-extrabold py-4 rounded-2xl shadow-lg">
+                                <i class="fab fa-whatsapp mr-2"></i>MESSAGE SELLER
+                            </button>
+                            ${p.Phone ? `<a href="tel:${p.Phone}" class="bg-green-600 text-white font-extrabold py-4 rounded-2xl text-center shadow-lg flex items-center justify-center"><i class="fas fa-phone mr-2"></i>CALL SELLER</a>` : ''}
+                        </div>
+                        <div class="bg-card p-6 rounded-[2rem] border border-base shadow-sm" id="rating-container" style="background: var(--card); border-color: var(--border);">
+                            <h3 class="font-extrabold text-sm mb-4" style="color: var(--text);">Rate & Review</h3>
+                            <div class="star-rating mb-4 flex gap-2" id="rating-input">
+                                ${[1,2,3,4,5].map(v => `<i class="fas fa-star text-2xl active" data-val="${v}"></i>`).join('')}
+                            </div>
+                            <textarea id="review-text" placeholder="Share your experience..." class="w-full bg-input border border-base p-4 text-sm h-24 rounded-2xl outline-none focus:ring-2 focus:ring-green-500" style="background: var(--input-bg); color: var(--text); border-color: var(--border);"></textarea>
+                            <button id="btn-submit-review" onclick="submitReview('${id}')" class="w-full bg-green-600 text-white py-3.5 rounded-2xl mt-4 font-bold">SUBMIT REVIEW</button>
+                        </div>
+                    `}
+                </div>
+            `;
+            showScreen('details-screen');
+            if (!isMyProduct) {
+                setupStarInput();
+                const existing = await getDocs(query(collection(db, "Products", id, "Reviews"), where("userId", "==", currentUserId)));
+                if (!existing.empty) {
+                    document.getElementById('rating-container').innerHTML = `
+                        <div class="p-6 bg-green-50 dark:bg-green-900/20 rounded-3xl text-center border border-green-100 dark:border-green-800/40">
+                            <i class="fas fa-circle-check text-green-600 mb-2 text-xl"></i>
+                            <p class="text-[11px] font-bold text-green-800 dark:text-green-300 uppercase">You've already reviewed this item!</p>
+                        </div>
+                    `;
+                }
+            }
+            loadSellerOtherItems(p.SellerId, id);
+            loadProductReviews(id);
+        };
+
+        async function loadSellerOtherItems(sellerId, currentProductId) {
+            const snap = await getDocs(query(collection(db, "Products"), where("SellerId", "==", sellerId)));
+            const container = document.getElementById('more-from-seller-grid');
+            if (!container) return;
+            const others = snap.docs.filter(d => d.id !== currentProductId);
+            container.innerHTML = others.length === 0 ? '<p class="text-[10px] opacity-40 col-span-2" style="color: var(--text-muted);">No other listings.</p>' : '';
+            others.forEach(d => {
+                const item = d.data();
+                container.innerHTML += `
+                    <div class="bg-input rounded-2xl overflow-hidden border border-base cursor-pointer" onclick="viewProduct('${d.id}')" style="background: var(--input-bg); border-color: var(--border);">
+                        <img src="${item.ImageURL}" class="w-full h-24 object-cover">
+                        <div class="p-2">
+                            <p class="text-[10px] font-bold truncate" style="color: var(--text);">${item.Title}</p>
+                            <p class="text-green-600 text-[10px] font-black">₦${item.Price}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function loadProductReviews(productId) {
+            const container = document.getElementById('reviews-placeholder');
+            if (!container) return;
+            
+            onSnapshot(query(collection(db, "Products", productId, "Reviews"), orderBy("timestamp", "desc")), async (snap) => {
+                if (!container) return;
+                if (snap.empty) {
+                    container.innerHTML = '<p class="text-[11px] opacity-30 text-center py-4 italic" style="color: var(--text-muted);">No reviews yet.</p>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                for (const reviewDoc of snap.docs) {
+                    const r = reviewDoc.data();
+                    const reviewId = reviewDoc.id;
+                    const date = r.timestamp?.seconds ? new Date(r.timestamp.seconds * 1000).toLocaleDateString() : 'Recent';
+                    
+                    const productSnap = await getDoc(doc(db, "Products", productId));
+                    const isSeller = productSnap.exists() && productSnap.data().SellerId === currentUserId;
+                    
+                    const reviewerExecSnap = await getDocs(query(
+                        collection(db, "executives"),
+                        where("userId", "==", r.userId)
+                    ));
+                    const isReviewerExec = !reviewerExecSnap.empty;
+                    
+                    let repliesHtml = '';
+                    const repliesSnap = await getDocs(collection(db, "Products", productId, "Reviews", reviewId, "Replies"));
+                    
+                    repliesSnap.forEach(replyDoc => {
+                        const reply = replyDoc.data();
+                        repliesHtml += `
+                            <div class="review-reply mt-2">
+                                <p class="text-[10px] font-bold text-green-600">${reply.sellerName || 'Seller'} replied:</p>
+                                <p class="text-[11px] mt-1" style="color: var(--text);">${reply.text}</p>
+                                <p class="text-[8px] opacity-40 mt-1" style="color: var(--text-muted);">${reply.timestamp ? new Date(reply.timestamp.seconds * 1000).toLocaleDateString() : ''}</p>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML += `
+                        <div class="bg-input p-4 rounded-2xl border border-base" id="review-${reviewId}" style="background: var(--input-bg); border-color: var(--border);">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-[9px] font-bold text-green-600">${r.userId.substring(5,7).toUpperCase()}</div>
+                                    <div class="flex items-center gap-1">
+                                        <p class="text-[10px] font-bold opacity-60" style="color: var(--text);">${r.userName || 'User'}</p>
+                                        ${isReviewerExec ? `
+                                            <span class="gold-check" title="Verified Executive"><i class="fas fa-check"></i></span>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <span class="text-[8px] opacity-30 font-bold uppercase" style="color: var(--text-muted);">${date}</span>
+                            </div>
+                            <div class="flex text-yellow-500 text-[10px] mb-2">
+                                ${'<i class="fas fa-star"></i>'.repeat(r.stars)}${'<i class="far fa-star"></i>'.repeat(5 - r.stars)}
+                            </div>
+                            <p class="text-xs leading-relaxed" style="color: var(--text);">${r.text}</p>
+                            ${repliesHtml}
+                            ${isSeller ? `
+                                <button onclick="replyToReview('${productId}', '${reviewId}', '${r.userName || 'User'}')" 
+                                    class="mt-2 text-[9px] bg-green-100 dark:bg-green-900/30 text-green-600 px-3 py-1 rounded-full font-bold hover:bg-green-200 dark:hover:bg-green-800 transition-colors">
+                                    REPLY
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function setupStarInput() {
+            let selected = 5;
+            const stars = document.querySelectorAll('#rating-input i');
+            stars.forEach(s => {
+                s.onclick = () => {
+                    selected = parseInt(s.dataset.val);
+                    stars.forEach(st => {
+                        st.classList.toggle('active', parseInt(st.dataset.val) <= selected);
+                    });
+                };
+            });
+            window.getCurrentStars = () => selected;
+        }
+
+        window.submitReview = async productId => {
+            const text = document.getElementById('review-text').value.trim();
+            const stars = window.getCurrentStars();
+            const btn = document.getElementById('btn-submit-review');
+            
+            if (text.length < 10) { 
+                alert("Write at least 10 characters! 📝"); 
+                return; 
+            }
+            
+            btn.disabled = true; 
+            btn.innerText = "Posting...";
+            
+            try {
+                const userSnap = await getDoc(doc(db, "Users", currentUserId));
+                const userName = userSnap.exists() ? userSnap.data().name : 'User';
+                
+                const ref = collection(db, "Products", productId, "Reviews");
+                const existing = await getDocs(query(ref, where("userId", "==", currentUserId)));
+                
+                if (!existing.empty) { 
+                    alert("Already reviewed! 👋"); 
+                    return; 
+                }
+                
+                await addDoc(ref, { 
+                    stars, 
+                    text, 
+                    userId: currentUserId,
+                    userName: userName,
+                    timestamp: serverTimestamp() 
+                });
+                
+                const pRef = doc(db, "Products", productId);
+                const pSnap = await getDoc(pRef);
+                const pData = pSnap.data();
+                
+                await updateDoc(pRef, { 
+                    Rating: (pData.Rating || 0) + stars, 
+                    ReviewCount: (pData.ReviewCount || 0) + 1 
+                });
+                
+                alert("Review published! ✨");
+                viewProduct(productId);
+            } catch (e) { 
+                alert("Submit failed."); 
+            }
+            
+            btn.disabled = false; 
+            btn.innerText = "SUBMIT REVIEW";
+        };
+
+        window.reportUser = async targetUserId => {
+            const reason = prompt("Why are you reporting this user?");
+            if (!reason) return;
+            if (confirm("⚠️ False reports may get you banned. Continue?")) {
+                try {
+                    await addDoc(collection(db, "Reports"), { 
+                        reportedUser: targetUserId, 
+                        reporterUser: currentUserId, 
+                        reason, 
+                        timestamp: serverTimestamp() 
+                    });
+                    alert("Report sent.");
+                } catch (e) { 
+                    alert("Error reporting."); 
+                }
+            }
+        };
+
+        // ============ ANNOUNCEMENTS WITH NOTIFICATIONS ============
+        window.loadAnnouncements = async () => {
+            const container = document.getElementById('announcements-feed');
+            if (!container) return;
+            
+            const isFeedTab = !document.getElementById('feed-screen').classList.contains('hidden');
+            
+            onSnapshot(query(collection(db, "announcements"), orderBy("createdAt", "desc")), async (snapshot) => {
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="card text-center py-12" style="background: var(--card); border-color: var(--border);">
+                            <i class="fas fa-bullhorn text-4xl text-muted mb-3"></i>
+                            <p class="text-muted">No announcements yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const isAdmin = isAdminMode;
+                const execSnap = await getDocs(query(
+                    collection(db, "executives"), 
+                    where("userId", "==", currentUserId)
+                ));
+                const isExecutive = !execSnap.empty;
+                
+                const userSnap = await getDoc(doc(db, "Users", currentUserId));
+                const userLevel = userSnap.exists() ? userSnap.data().level : null;
+                
+                // Count unread announcements
+                let newUnreadCount = 0;
+                const docs = [];
+                
+                snapshot.forEach(doc => {
+                    docs.push({ id: doc.id, ...doc.data() });
+                });
+                
+                const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+                
+                docs.forEach(ann => {
+                    const annTime = ann.createdAt ? ann.createdAt.seconds * 1000 : 0;
+                    if (annTime > lastSeenAnnouncementTime && annTime > oneDayAgo) {
+                        newUnreadCount++;
+                    }
+                });
+                
+                unreadAnnouncementCount = newUnreadCount;
+                
+                if (!isFeedTab) {
+                    updateAnnouncementBadge(unreadAnnouncementCount);
+                } else {
+                    updateAnnouncementBadge(0);
+                }
+                
+                // Check for newly added announcements
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        const newAnn = change.doc.data();
+                        const annTime = newAnn.createdAt ? newAnn.createdAt.seconds * 1000 : 0;
+                        
+                        if (snapshot.docs.length > 1 && 
+                            (Date.now() - annTime) < 10000 && 
+                            !isFeedTab) {
+                            showAnnouncementToast(newAnn);
+                        }
+                    }
+                });
+                
+                // Display announcements
+                container.innerHTML = '';
+                
+                for (const ann of docs) {
+                    const annId = ann.id;
+                    const date = ann.createdAt ? 
+                        new Date(ann.createdAt.seconds * 1000).toLocaleDateString('en-US', { 
+                            month: 'short', day: 'numeric', year: 'numeric' 
+                        }) : 'Just now';
+                    
+                    const annTime = ann.createdAt ? ann.createdAt.seconds * 1000 : 0;
+                    const isNew = annTime > lastSeenAnnouncementTime && (Date.now() - annTime) < 86400000;
+                    
+                    const selectedLevel = document.getElementById('filter-level')?.value;
+                    const departmentFilter = document.getElementById('filter-department')?.value;
+                    
+                    if (departmentFilter !== 'all' && ann.departmentId !== departmentFilter) continue;
+                    if (selectedLevel !== 'all' && (!ann.targetLevels || !ann.targetLevels.includes(selectedLevel))) continue;
+                    
+                    const canDelete = isAdmin || (isExecutive && ann.executiveId === currentUserId);
+                    
+                    let levelBadges = '';
+                    if (ann.targetLevels && ann.targetLevels.length > 0) {
+                        if (ann.targetLevels.includes('all')) {
+                            levelBadges = '<span class="level-badge level-all ml-2">All Levels</span>';
+                        } else {
+                            ann.targetLevels.forEach(level => {
+                                levelBadges += `<span class="level-badge level-${level} ml-1">${level}L</span>`;
+                            });
+                        }
+                    }
+                    
+                    container.innerHTML += `
+                        <div class="card p-6 relative ${isNew ? 'new-announcement' : ''}" style="background: var(--card); border-color: var(--border);">
+                            ${canDelete ? `
+                                <button onclick="deleteAnnouncement('${annId}')" class="delete-btn absolute top-4 right-4" title="Delete announcement">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                            
+                            <div class="flex items-center gap-2 mb-3 pr-8 flex-wrap">
+                                <span class="badge-department px-3 py-1 bg-input rounded-full text-xs" style="color: var(--text);">
+                                    <i class="fas fa-building mr-1"></i>
+                                    ${ann.departmentName || 'General'}
+                                </span>
+                                ${levelBadges}
+                                ${isNew ? '<span class="bg-green-500 text-white text-[8px] px-2 py-0.5 rounded-full ml-2 animate-pulse">NEW</span>' : ''}
+                                <span class="text-xs text-muted ml-auto">${date}</span>
+                                ${ann.pinned ? '<i class="fas fa-thumbtack text-yellow-500"></i>' : ''}
+                            </div>
+                            
+                            <h3 class="font-bold text-lg mb-2" style="color: var(--text);">${ann.title}</h3>
+                            <p class="text-muted mb-4">${ann.content}</p>
+                            
+                            ${ann.eventDate ? `
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mb-3 flex items-center gap-2">
+                                    <i class="far fa-calendar text-blue-500"></i>
+                                    <span class="text-sm">Event: ${new Date(ann.eventDate).toLocaleDateString()}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${ann.link ? `
+                                <a href="${ann.link}" target="_blank" class="flex items-center gap-2 text-green-600 mb-3">
+                                    <i class="fas fa-link"></i>
+                                    <span class="text-sm">View details</span>
+                                </a>
+                            ` : ''}
+                            
+                            <div class="flex items-center gap-3 pt-3 border-t border-base" style="border-color: var(--border);">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white text-xs font-bold">
+                                    ${ann.executiveName ? ann.executiveName.charAt(0) : 'EX'}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1">
+                                        <span class="font-medium" style="color: var(--text);">${ann.executiveName || 'Executive'}</span>
+                                        <span class="gold-check" title="Verified Executive"><i class="fas fa-check"></i></span>
+                                    </div>
+                                    <p class="text-xs text-muted">${ann.executivePosition || 'Executive'} • ${ann.departmentName}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (isFeedTab) {
+                    markAnnouncementsAsRead();
+                }
+            });
+        };
+
+        window.filterAnnouncements = () => {
+            loadAnnouncements();
+        };
+
+        window.deleteAnnouncement = async (announcementId) => {
+            if (confirm("Are you sure you want to delete this announcement?")) {
+                try {
+                    await deleteDoc(doc(db, "announcements", announcementId));
+                    alert("Announcement deleted successfully!");
+                } catch (error) {
+                    console.error("Error deleting announcement:", error);
+                    alert("Failed to delete announcement.");
+                }
+            }
+        };
+
+        window.deleteGlobalBroadcast = async () => {
+            if (confirm("Are you sure you want to delete the global broadcast?")) {
+                try {
+                    await setDoc(doc(db, "AppData", "Announcement"), { 
+                        message: "", 
+                        active: false 
+                    });
+                    
+                    document.getElementById('admin-announcement-input').value = '';
+                    
+                    alert("✅ Global broadcast deleted!");
+                } catch (error) {
+                    console.error("Error deleting broadcast:", error);
+                    alert("Failed to delete broadcast.");
+                }
+            }
+        };
+
+        // Post announcement (FIXED with better authorization)
+        window.postAnnouncement = async () => {
+            const title = document.getElementById('announce-title').value.trim();
+            const content = document.getElementById('announce-content').value.trim();
+            
+            if (!title || !content) {
+                alert("Please enter title and content");
+                return;
+            }
+            
+            // First try to find executive by userId
+            let execSnap = await getDocs(query(
+                collection(db, "executives"), 
+                where("userId", "==", currentUserId)
+            ));
+            
+            // If not found by userId, try by email
+            if (execSnap.empty) {
+                const email = document.getElementById('set-profile-email')?.value;
+                if (email) {
+                    execSnap = await getDocs(query(
+                        collection(db, "executives"), 
+                        where("email", "==", email)
+                    ));
+                    
+                    // If found by email, link it!
+                    if (!execSnap.empty) {
+                        const execDoc = execSnap.docs[0];
+                        await updateDoc(doc(db, "executives", execDoc.id), {
+                            userId: currentUserId
+                        });
+                        console.log("✅ Executive linked via email");
+                    }
+                }
+            }
+            
+            if (execSnap.empty) {
+                alert("You are not authorized to post announcements. Please make sure your email matches an executive record.");
+                return;
+            }
+            
+            const exec = execSnap.docs[0].data();
+            const execId = execSnap.docs[0].id;
+            
+            // Get selected levels
+            const checkboxes = document.querySelectorAll('.level-checkbox:checked');
+            const targetLevels = Array.from(checkboxes).map(cb => cb.value);
+            
+            // Get department info
+            const deptSnap = await getDoc(doc(db, "departments", exec.departmentId));
+            
+            await addDoc(collection(db, "announcements"), {
+                departmentId: exec.departmentId,
+                departmentName: deptSnap.exists() ? deptSnap.data().name : 'Department',
+                executiveId: currentUserId,
+                executiveName: exec.name,
+                executivePosition: exec.position,
+                title: title,
+                content: content,
+                link: document.getElementById('announce-link').value || null,
+                eventDate: document.getElementById('announce-date').value || null,
+                targetLevels: targetLevels,
+                createdAt: serverTimestamp(),
+                pinned: false
+            });
+            
+            // Clear form
+            document.getElementById('announce-title').value = '';
+            document.getElementById('announce-content').value = '';
+            document.getElementById('announce-link').value = '';
+            document.getElementById('announce-date').value = '';
+            
+            // Reset level checkboxes
+            document.querySelectorAll('.level-checkbox').forEach(cb => {
+                cb.checked = false;
+            });
+            document.getElementById('select-all-levels').checked = true;
+            
+            alert("✅ Announcement posted successfully!");
+            
+            // Reload announcements to show the new one
+            loadAnnouncements();
+        };
+
+        // Select all levels
+        document.getElementById('select-all-levels')?.addEventListener('change', (e) => {
+            document.querySelectorAll('.level-checkbox').forEach(cb => {
+                cb.checked = e.target.checked;
+            });
+        });
+
+        // Periodic check for new announcements
+        setInterval(() => {
+            const isFeedTab = !document.getElementById('feed-screen').classList.contains('hidden');
+            if (!isFeedTab) {
+                loadAnnouncements();
+            }
+        }, 30000);
+
+        // ============ DEPARTMENTS ============
+        window.addDepartment = async () => {
+            const name = document.getElementById('dept-name').value.trim();
+            const code = document.getElementById('dept-code').value.trim();
+            
+            if (!name || !code) {
+                alert("Please fill all fields");
+                return;
+            }
+            
+            await addDoc(collection(db, "departments"), {
+                name: name,
+                code: code.toUpperCase(),
+                createdAt: serverTimestamp()
+            });
+            
+            document.getElementById('dept-name').value = '';
+            document.getElementById('dept-code').value = '';
+            loadStats();
+        };
+
+        window.loadDepartments = () => {
+            const container = document.getElementById('departments-list');
+            const grid = document.getElementById('departments-grid');
+            const filterSelect = document.getElementById('filter-department');
+            
+            onSnapshot(collection(db, "departments"), (snapshot) => {
+                if (container) {
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p class="text-center text-muted py-4">No departments yet. Add your first department!</p>';
+                    } else {
+                        container.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const dept = doc.data();
+                            container.innerHTML += `
+                                <div class="flex items-center justify-between p-3 bg-input rounded-lg">
+                                    <div>
+                                        <p class="font-medium" style="color: var(--text);">${dept.name}</p>
+                                        <p class="text-xs text-muted">${dept.code}</p>
+                                    </div>
+                                    <button onclick="deleteDepartment('${doc.id}')" class="text-red-500 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+                
+                if (grid) {
+                    if (snapshot.empty) {
+                        grid.innerHTML = '<p class="text-center text-muted py-8">No departments available</p>';
+                    } else {
+                        grid.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const dept = doc.data();
+                            grid.innerHTML += `
+                                <div class="card text-center p-6 cursor-pointer" style="background: var(--card); border-color: var(--border);" onclick="filterByDepartment('${doc.id}')">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-xl">
+                                        ${dept.code}
+                                    </div>
+                                    <h3 class="font-bold" style="color: var(--text);">${dept.name}</h3>
+                                    <p class="text-xs text-muted mt-1">${dept.code}</p>
+                                    <button class="btn btn-outline w-full mt-4 text-sm" style="border-color: var(--border); color: var(--text);">
+                                        View Announcements
+                                    </button>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+                
+                if (filterSelect) {
+                    filterSelect.innerHTML = '<option value="all">All Departments</option>';
+                    snapshot.forEach(doc => {
+                        const dept = doc.data();
+                        filterSelect.innerHTML += `<option value="${doc.id}">${dept.name}</option>`;
+                    });
+                }
+                
+                loadStats();
+            });
+        };
+
+        window.deleteDepartment = async (id) => {
+            if (confirm("Delete this department? This will NOT delete associated executives.")) {
+                await deleteDoc(doc(db, "departments", id));
+            }
+        };
+
+        window.filterByDepartment = (deptId) => {
+            switchTab('feed');
+            document.getElementById('filter-department').value = deptId;
+            loadAnnouncements();
+        };
+
+        // ============ EXECUTIVES ============
+        window.loadDepartmentDropdown = async () => {
+            const select = document.getElementById('exec-dept');
+            if (!select) return;
+            
+            const snapshot = await getDocs(collection(db, "departments"));
+            
+            select.innerHTML = '<option value="">Select Department</option>';
+            snapshot.forEach(doc => {
+                const dept = doc.data();
+                select.innerHTML += `<option value="${doc.id}">${dept.name} (${dept.code})</option>`;
+            });
+        };
+
+        window.addExecutive = async () => {
+            const deptId = document.getElementById('exec-dept').value;
+            const name = document.getElementById('exec-name').value.trim();
+            const position = document.getElementById('exec-position').value.trim();
+            const email = document.getElementById('exec-email').value.trim();
+            const phone = document.getElementById('exec-phone').value.trim();
+            
+            if (!deptId || !name || !position) {
+                alert("Please select department, enter name and position");
+                return;
+            }
+            
+            await addDoc(collection(db, "executives"), {
+                departmentId: deptId,
+                name: name,
+                position: position,
+                email: email || null,
+                phone: phone || null,
+                userId: null,
+                createdAt: serverTimestamp(),
+                isActive: true
+            });
+            
+            document.getElementById('exec-name').value = '';
+            document.getElementById('exec-position').value = '';
+            document.getElementById('exec-email').value = '';
+            document.getElementById('exec-phone').value = '';
+            loadStats();
+        };
+
+        window.loadExecutives = () => {
+            const container = document.getElementById('executives-list');
+            const grid = document.getElementById('executives-grid');
+            
+            onSnapshot(query(collection(db, "executives"), orderBy("createdAt", "desc")), async (snapshot) => {
+                if (container) {
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p class="text-center text-muted py-4">No executives yet. Add your first executive!</p>';
+                    } else {
+                        container.innerHTML = '';
+                        for (const docSnap of snapshot.docs) {
+                            const exec = docSnap.data();
+                            const deptDoc = await getDoc(doc(db, "departments", exec.departmentId));
+                            
+                            container.innerHTML += `
+                                <div class="flex items-center justify-between p-3 bg-input rounded-lg">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <p class="font-medium" style="color: var(--text);">${exec.name}</p>
+                                            <span class="badge-gold text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                                                <i class="fas fa-check"></i> EXECUTIVE
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-muted">${exec.position} • ${deptDoc.exists() ? deptDoc.data().name : 'Unknown'}</p>
+                                        ${exec.email ? `<p class="text-xs text-muted mt-1"><i class="far fa-envelope"></i> ${exec.email}</p>` : ''}
+                                        ${exec.phone ? `<p class="text-xs text-muted"><i class="fas fa-phone"></i> ${exec.phone}</p>` : ''}
+                                    </div>
+                                    <button onclick="deleteExecutive('${docSnap.id}')" class="text-red-500 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+                
+                if (grid) {
+                    if (snapshot.empty) {
+                        grid.innerHTML = '<p class="text-center text-muted py-8">No executives listed yet</p>';
+                    } else {
+                        grid.innerHTML = '';
+                        for (const docSnap of snapshot.docs) {
+                            const exec = docSnap.data();
+                            const deptDoc = await getDoc(doc(db, "departments", exec.departmentId));
+                            
+                            grid.innerHTML += `
+                                <div class="card text-center p-6" style="background: var(--card); border-color: var(--border);">
+                                    <div class="relative inline-block">
+                                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-2xl">
+                                            ${exec.name.charAt(0)}
+                                        </div>
+                                        <span class="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full w-6 h-6 flex items-center justify-center text-white text-xs border-2 border-white shadow-lg">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </div>
+                                    <h3 class="font-bold flex items-center justify-center gap-1" style="color: var(--text);">
+                                        ${exec.name}
+                                        <span class="gold-check" title="Verified Executive"><i class="fas fa-check"></i></span>
+                                    </h3>
+                                    <p class="text-sm text-green-600">${exec.position}</p>
+                                    <p class="text-xs text-muted mt-1">${deptDoc.exists() ? deptDoc.data().name : ''}</p>
+                                    <div class="flex justify-center gap-3 mt-3">
+                                        ${exec.phone ? `
+                                            <a href="tel:${exec.phone}" class="text-green-600 hover:text-green-700">
+                                                <i class="fas fa-phone"></i>
+                                            </a>
+                                        ` : ''}
+                                        ${exec.email ? `
+                                            <a href="mailto:${exec.email}" class="text-blue-600 hover:text-blue-700">
+                                                <i class="far fa-envelope"></i>
+                                            </a>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+            });
+        };
+
+        window.deleteExecutive = async (id) => {
+            if (confirm("Remove this executive?")) {
+                await deleteDoc(doc(db, "executives", id));
+            }
+        };
+
+        // ============ STATS ============
+        window.loadStats = async () => {
+            const deptSnap = await getDocs(collection(db, "departments"));
+            const execSnap = await getDocs(collection(db, "executives"));
+            const annSnap = await getDocs(collection(db, "announcements"));
+            const prodSnap = await getDocs(collection(db, "Products"));
+            
+            document.getElementById('stat-departments').textContent = deptSnap.size;
+            document.getElementById('stat-executives').textContent = execSnap.size;
+            document.getElementById('stat-announcements').textContent = annSnap.size;
+            document.getElementById('stat-products').textContent = prodSnap.size;
+        };
+
+        // My Items
+        window.loadMyItems = () => {
+            showScreen('my-items-screen');
+            if (activeMyItemsListener) { activeMyItemsListener(); activeMyItemsListener = null; }
+            const q = isAdminMode
+                ? query(collection(db, "Products"), orderBy("CreatedAt", "desc"))
+                : query(collection(db, "Products"), where("SellerId", "==", currentUserId), orderBy("CreatedAt", "desc"));
+            activeMyItemsListener = onSnapshot(q, snap => {
+                const grid = document.getElementById('my-items-grid');
+                grid.innerHTML = '';
+                if (snap.empty) {
+                    grid.innerHTML = '<p class="text-center opacity-40 py-10" style="color: var(--text-muted);">No listings yet.</p>';
+                    return;
+                }
+                snap.docs.forEach(d => {
+                    const p = d.data();
+                    grid.innerHTML += `
+                        <div class="bg-card p-4 rounded-2xl border border-base flex gap-4 items-center shadow-sm" style="background: var(--card); border-color: var(--border);">
+                            <img src="${p.ImageURL}" class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-sm truncate" style="color: var(--text);">${p.Title}</h3>
+                                <p class="text-green-600 font-bold text-xs">₦${p.Price}</p>
+                            </div>
+                            <div class="flex gap-2 flex-shrink-0">
+                                <button onclick="openEditScreen('${d.id}')" class="bg-green-50 dark:bg-green-900/30 text-green-600 p-2.5 rounded-xl text-xs"><i class="fas fa-pen-to-square"></i></button>
+                                <button onclick="deleteProduct('${d.id}')" class="bg-red-50 dark:bg-red-900/30 text-red-600 p-2.5 rounded-xl text-xs"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+   
